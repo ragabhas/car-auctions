@@ -1,0 +1,60 @@
+# Build and Output folders
+bin/
+obj/
+
+# User-specific files
+*.user
+*.swp
+
+# Visual Studio Code files
+.vscode/
+.vscode/*
+
+# Logs and crash reports
+*.log
+*.stackdump
+logs/
+*.pid
+*.pid.lock
+
+# ASP.NET Core specific
+appsettings.Development.json
+appsettings.Production.json
+appsettings.*.json
+secrets.json
+.env
+
+# Dependency directories
+node_modules/
+packages/
+
+# Dotnet-specific
+*.vs/
+*.idea/
+*.suo
+*.ntvs*
+*.njsproj
+*.sln.cache
+*.sln.docstates
+*.config
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.old
+*.orig
+
+# Database and Backup files
+*.db
+*.bak
+*.mdf
+*.ldf
+
+# Published Output
+publish/
+wwwroot/dist/
+wwwroot/node_modules/
+
+# Custom Folders
+CourseAssets/
