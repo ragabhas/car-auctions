@@ -65,4 +65,48 @@ public class AuctionsController : ControllerBase
 
         return CreatedAtAction(nameof(GetById), new { id = auction.Id }, auctionDto);
     }
+
+    [HttpPut("{id}")]
+    public async Task<ActionResult> UpdateAuction(Guid id, UpdateAuctionDto updateAuctionDto)
+    {
+        var auction = await _context.Auctions
+        .Include(a => a.Item)
+        .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (auction == null)
+        {
+            return NotFound();
+        }
+
+        auction.Item.Make = updateAuctionDto.Make ?? auction.Item.Make;
+        auction.Item.Model = updateAuctionDto.Model ?? auction.Item.Model;
+        auction.Item.Year = updateAuctionDto.Year ?? auction.Item.Year;
+        auction.Item.Color = updateAuctionDto.Color ?? auction.Item.Color;
+        auction.Item.Mileage = updateAuctionDto.Mileage ?? auction.Item.Mileage;
+
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if (!result) return BadRequest();
+
+        return Ok();
+    }
+
+    [HttpDelete("{id}")]
+    public async Task<ActionResult> DeleteAuction(Guid id)
+    {
+        var auction = await _context.Auctions
+        .FirstOrDefaultAsync(a => a.Id == id);
+
+        if (auction == null)
+        {
+            return NotFound();
+        }
+
+        _context.Auctions.Remove(auction);
+        var result = await _context.SaveChangesAsync() > 0;
+
+        if (!result) return BadRequest();
+
+        return NoContent();
+    }
 }
