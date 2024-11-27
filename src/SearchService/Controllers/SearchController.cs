@@ -9,9 +9,11 @@ namespace SearchService.Controllers;
 public class SearchController : ControllerBase
 {
     [HttpGet]
-    public async Task<ActionResult<List<Item>>> Search(string searchTerm)
+    public async Task<ActionResult<List<Item>>> Search(string searchTerm,
+    int pageNumber = 1,
+    int pageSize = 4)
     {
-        var query = DB.Find<Item>();
+        var query = DB.PagedSearch<Item>();
         query.Sort(i => i.Ascending(i => i.Make));
 
         if (!string.IsNullOrEmpty(searchTerm))
@@ -19,8 +21,16 @@ public class SearchController : ControllerBase
             query.Match(MongoDB.Entities.Search.Full, searchTerm).SortByTextScore();
         }
 
+        query.PageNumber(pageNumber);
+        query.PageSize(pageSize);
+
         var result = await query.ExecuteAsync();
 
-        return result;
+        return Ok(new
+        {
+            results = result.Results,
+            pageCount = result.PageCount,
+            totalCount = result.TotalCount
+        });
     }
 }
