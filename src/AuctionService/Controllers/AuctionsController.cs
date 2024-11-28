@@ -90,6 +90,10 @@ public class AuctionsController : ControllerBase
         auction.Item.Color = updateAuctionDto.Color ?? auction.Item.Color;
         auction.Item.Mileage = updateAuctionDto.Mileage ?? auction.Item.Mileage;
 
+        var auctionUpdated = _mapper.Map<AuctionUpdated>(auction);
+
+        await _publishEndpoint.Publish(auctionUpdated);
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (!result) return BadRequest();
@@ -109,10 +113,13 @@ public class AuctionsController : ControllerBase
         }
 
         _context.Auctions.Remove(auction);
+
+        await _publishEndpoint.Publish(new AuctionDeleted { Id = auction.Id.ToString() });
+
         var result = await _context.SaveChangesAsync() > 0;
 
         if (!result) return BadRequest();
 
-        return NoContent();
+        return Ok();
     }
 }

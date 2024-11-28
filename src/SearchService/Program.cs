@@ -21,6 +21,19 @@ builder.Services.AddMassTransit(x =>
       e.Consumer<AuctionCreatedConsumer>(context);
     });
 
+    cfg.ReceiveEndpoint("seatch-auction-updated", e =>
+    {
+      e.UseMessageRetry(r => r.Interval(5, 1000));
+      e.Consumer<AuctionUpdatedConsumer>(context);
+    });
+
+    cfg.ReceiveEndpoint("seatch-auction-deleted", e =>
+    {
+      e.UseMessageRetry(r => r.Interval(5, 1000));
+      e.Consumer<AuctionDeletedConsumer>(context);
+    });
+
+
     cfg.ConfigureEndpoints(context);
   });
 });
