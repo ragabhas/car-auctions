@@ -18,9 +18,7 @@ logs/
 *.pid.lock
 
 # ASP.NET Core specific
-appsettings.Development.json
 appsettings.Production.json
-appsettings.*.json
 secrets.json
 .env
 
